@@ -10,19 +10,13 @@ class Profile extends Component {
   };
 
   componentDidMount() {
-    const isAuthenticated = window.localStorage.getItem("isAuthenticated");
-    console.log(isAuthenticated);
-    if (!isAuthenticated) {
-      this.logout();
-    }
-
     // get user info
     axios
       .get("/auth/api")
       .then(res => {
         console.log(res);
         if (Object.entries(res.data).length === 0) {
-          this.logOut();
+          this.logout();
         }
         this.setState({
           name: res.data.user.username,
@@ -40,7 +34,7 @@ class Profile extends Component {
         window.localStorage.removeItem("isAuthenticated");
         this.props.history.push("/login");
       })
-      .catch(err => console.log(err));
+      .catch(err => this.props.history.push("/login"));
   };
 
   render() {

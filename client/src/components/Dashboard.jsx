@@ -9,19 +9,15 @@ class Dashboard extends Component {
   };
 
   componentDidMount() {
-    const isAuthenticated = window.localStorage.getItem("isAuthenticated");
-    console.log(isAuthenticated);
-    if (!isAuthenticated) {
-      this.logout();
-    }
     // get user info // or could have stored in local storage
     axios
       .get("/auth/api")
       .then(res => {
         console.log(res);
         // cookies present when request made ? res.data==user : res.data={}
+        console.log(Object.entries(res.data).length === 0);
         if (Object.entries(res.data).length === 0) {
-          this.logOut();
+          this.logout();
         }
 
         this.setState({
@@ -30,7 +26,7 @@ class Dashboard extends Component {
           about: res.data.user.about
         });
       })
-      .catch(err => console.log(err));
+      .catch(err => this.logout());
   }
   logout = () => {
     axios
@@ -39,7 +35,7 @@ class Dashboard extends Component {
         window.localStorage.removeItem("isAuthenticated");
         this.props.history.push("/login");
       })
-      .catch(err => console.log(err));
+      .catch(err => this.props.history.push("/login"));
   };
 
   render() {
