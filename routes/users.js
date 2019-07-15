@@ -18,7 +18,6 @@ router.post("/signup", (req, res, next) => {
     if (error) {
       console.log("IN ERROR");
       return res.status(500).json({
-        message: "Authentication error.  Please try again.",
         success: false,
         error: error.message || "Internal Server Error"
       });
@@ -33,6 +32,24 @@ router.post("/signup", (req, res, next) => {
   })(req, res, next);
 });
 
-router.post("/signin", function(req, res, next) {});
+router.post("/signin", function(req, res, next) {
+  passport.authenticate("local-signin", (error, user, info) => {
+    console.log({ error, user, info });
+    if (error) {
+      console.log("IN ERROR");
+      return res.status(500).json({
+        success: false,
+        error: error.message || "Internal Server Error"
+      });
+    }
+
+    return res.json({
+      message: "User is authenticated",
+      success: true,
+      user
+    });
+    // passing the original req/res objects to passport
+  })(req, res, next);
+});
 
 module.exports = router;

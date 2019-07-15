@@ -48,8 +48,13 @@ const SignupStrategy = new Strategy(
             return done(error, null);
           }
           //dont send the hashed pwd to the client
-          delete inserted.password;
-          return done(null, inserted);
+          const mongoRes = {
+            _id: inserted._id,
+            about: inserted.about,
+            username: inserted.username,
+            email: inserted.email
+          };
+          return done(null, mongoRes);
         });
       });
 
