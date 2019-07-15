@@ -22,16 +22,29 @@ router.post("/signup", (req, res, next) => {
         error: error.message || "Internal Server Error"
       });
     }
-
-    return res.json({
-      message: "User is authenticated",
-      success: true,
-      user
+    // setting up persistent sessions
+    req.login(user, function(err) {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          error: err || "Internal Server Error"
+        });
+      }
+      user.isAuthenticated = true;
+      //TODO: remove pwd data
+      return res.json(user);
     });
+
+    // not persistent login
+    // return res.json({
+    //   message: "User is authenticated",
+    //   success: true,
+    //   user
+    // });
     // passing the original req/res objects to passport
   })(req, res, next);
 });
-
+// /auth/signin
 router.post("/signin", function(req, res, next) {
   passport.authenticate("local-signin", (error, user, info) => {
     console.log({ error, user, info });
@@ -43,13 +56,36 @@ router.post("/signin", function(req, res, next) {
       });
     }
 
-    return res.json({
-      message: "User is authenticated",
-      success: true,
-      user
+    // setting up persistent sessions
+    req.login(user, function(err) {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          error: err || "Internal Server Error"
+        });
+      }
+      user.isAuthenticated = true;
+      //TODO: remove pwd data
+      return res.json(user);
     });
+
+    // return res.json({
+    //   message: "User is authenticated",
+    //   success: true,
+    //   user
+    // });
     // passing the original req/res objects to passport
   })(req, res, next);
+});
+// /auth/api
+router.get("/api", (req, res) => {
+  // get the user info from passport
+  console.log(req.user); //or req.session.passport.user fo
+  res.json({ message: "hello world" });
+});
+router.get("/logout", function(req, res) {
+  req.logout();
+  res.send(true);
 });
 
 module.exports = router;

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
 class Login extends Component {
   state = {
@@ -22,7 +23,11 @@ class Login extends Component {
           email,
           password
         })
-        .then(data => {
+        .then(response => {
+          const isAuthenticated = response.data.isAuthenticated;
+          window.localStorage.setItem("isAuthenticated", isAuthenticated);
+          this.setState({ error: false, message: "" });
+          // TODO: Add user info to localstorage
           // login was successful
           this.props.history.push("/profile");
         })
@@ -37,6 +42,12 @@ class Login extends Component {
 
   render() {
     const errorMessage = this.state.message || "Please Try Again";
+
+    const isAuthenticated = window.localStorage.getItem("isAuthenticated");
+
+    if (isAuthenticated) {
+      return <Redirect to="/profile" />;
+    }
     return (
       <div style={styles.loginContainer}>
         <h2>Login:</h2>

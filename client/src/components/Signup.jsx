@@ -23,9 +23,10 @@ class Signup extends Component {
           email,
           password
         })
-        .then(data => {
+        .then(response => {
           // login was successful
-          // TODO: Add user info to localstorage
+          const isAuthenticated = response.data.isAuthenticated;
+          window.localStorage.setItem("isAuthenticated", isAuthenticated);
           this.props.history.push("/profile");
         })
         .catch(err => {
