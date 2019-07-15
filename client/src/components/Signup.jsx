@@ -27,7 +27,9 @@ class Signup extends Component {
           // login was successful
           const isAuthenticated = response.data.isAuthenticated;
           window.localStorage.setItem("isAuthenticated", isAuthenticated);
-          this.props.history.push("/profile");
+          if (isAuthenticated) {
+            this.props.history.push("/profile");
+          }
         })
         .catch(err => {
           console.log(err.response);

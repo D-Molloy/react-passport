@@ -29,7 +29,10 @@ class Login extends Component {
           this.setState({ error: false, message: "" });
           // TODO: Add user info to localstorage
           // login was successful
-          this.props.history.push("/profile");
+
+          if (isAuthenticated) {
+            this.props.history.push("/profile");
+          }
         })
         .catch(err => {
           console.log(err.response);

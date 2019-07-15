@@ -77,12 +77,14 @@ router.post("/signin", function(req, res, next) {
     // passing the original req/res objects to passport
   })(req, res, next);
 });
+
 // /auth/api
 router.get("/api", (req, res) => {
   // get the user info from passport
   console.log(req.user); //or req.session.passport.user fo
-  res.json({ message: "hello world" });
+  res.json({ user: req.user });
 });
+
 router.get("/logout", function(req, res) {
   req.logout();
   res.send(true);
