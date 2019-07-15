@@ -30,7 +30,14 @@ const LoginStrategy = new Strategy({ usernameField: "email" }, function(
       if (!isPasswordValid) {
         return done("Email or password not valid.", null);
       }
-      return done(null, user);
+
+      const mongoRes = {
+        _id: user._id,
+        about: user.about,
+        username: user.username,
+        email: user.email
+      };
+      return done(null, mongoRes);
     });
 });
 

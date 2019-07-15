@@ -39,7 +39,7 @@ router.post("/signin", function(req, res, next) {
       console.log("IN ERROR");
       return res.status(500).json({
         success: false,
-        error: error.message || "Internal Server Error"
+        error: error || "Internal Server Error"
       });
     }
 

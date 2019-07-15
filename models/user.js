@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 const UserSchema = new Schema({
-  username: String,
+  // username: String,
   password: String,
-  email: String,
-  about: String
+  email: String
+  // about: String
 });
 
 const User = mongoose.model("User", UserSchema);
