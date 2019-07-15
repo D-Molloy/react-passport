@@ -8,21 +8,29 @@ class Profile extends Component {
     about: "",
     email: ""
   };
+
   componentDidMount() {
     const isAuthenticated = window.localStorage.getItem("isAuthenticated");
     console.log(isAuthenticated);
     if (!isAuthenticated) {
-      this.props.history.push("/login");
+      this.logout();
     }
 
     // get user info
-    axios.get("/auth/api").then(data => {
-      this.setState({
-        name: data.data.user.username,
-        email: data.data.user.email,
-        about: data.data.user.about
-      });
-    });
+    axios
+      .get("/auth/api")
+      .then(res => {
+        console.log(res);
+        if (Object.entries(res.data).length === 0) {
+          this.logOut();
+        }
+        this.setState({
+          name: res.data.user.username,
+          email: res.data.user.email,
+          about: res.data.user.about
+        });
+      })
+      .catch(err => console.log(err));
   }
 
   logout = () => {
