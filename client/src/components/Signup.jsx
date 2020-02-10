@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
 
 class Signup extends Component {
   state = {
-    email: "",
-    password: "",
+    email: '',
+    password: '',
     error: false,
-    message: ""
+    message: ''
   };
 
   handleChange = e => {
     const { name, value } = e.target;
-    this.setState({ [name]: value, error: false, message: "" });
+    this.setState({ [name]: value, error: false, message: '' });
   };
 
   handleSubmit = e => {
@@ -19,16 +19,17 @@ class Signup extends Component {
     const { email, password } = this.state;
     if (email && password) {
       axios
-        .post("/auth/signup", {
+        .post('/auth/signup', {
           email,
           password
         })
         .then(response => {
           // login was successful
+          console.log('response.data', response.data);
           const isAuthenticated = response.data.isAuthenticated;
-          window.localStorage.setItem("isAuthenticated", isAuthenticated);
+          window.localStorage.setItem('isAuthenticated', isAuthenticated);
           if (isAuthenticated) {
-            this.props.history.push("/profile");
+            this.props.history.push('/profile');
           }
         })
         .catch(err => {
@@ -40,25 +41,24 @@ class Signup extends Component {
     }
   };
   render() {
-    const errorMessage = this.state.message || "Please Try Again";
     return (
       <div style={styles.loginContainer}>
         <h2>Signup:</h2>
         <form onSubmit={this.handleSubmit} style={styles.loginContainer}>
-          <label htmlFor="email">Email:</label>
+          <label htmlFor='email'>Email:</label>
           <input
-            type="text"
-            name="email"
-            placeholder="email@email.com"
+            type='text'
+            name='email'
+            placeholder='email@email.com'
             value={this.state.email}
             onChange={this.handleChange}
           />
           <br />
-          <label htmlFor="password">Password:</label>
+          <label htmlFor='password'>Password:</label>
           <input
-            type="password"
-            name="password"
-            placeholder="password"
+            type='password'
+            name='password'
+            placeholder='password'
             value={this.state.password}
             onChange={this.handleChange}
           />
@@ -66,7 +66,7 @@ class Signup extends Component {
           <button>Login</button>
         </form>
         {this.state.error ? (
-          <p style={{ color: "red" }}>{errorMessage}</p>
+          <p style={{ color: 'red' }}>'Please Try Again'</p>
         ) : null}
       </div>
     );
@@ -74,9 +74,9 @@ class Signup extends Component {
 }
 const styles = {
   loginContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "Center"
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   }
 };
 export default Signup;

@@ -1,21 +1,22 @@
-const Strategy = require("passport-local").Strategy;
-const bcrypt = require("bcryptjs");
-const User = require("../models/user");
+const Strategy = require('passport-local').Strategy;
+const bcrypt = require('bcryptjs');
+const User = require('../models/user');
 
 const salt = bcrypt.genSaltSync(10);
 
 const SignupStrategy = new Strategy(
   // passReqToCallback - get access to the entire req
   {
-    passReqToCallback: true
+    passReqToCallback: true,
     // can also change the username param to email by:
-    // usernameField: 'email'
+    usernameField: 'email'
     // and passing email as the name of the parameter for clarity
   },
   // passport
   function(req, username, password, done) {
-    const { about, email } = req.body;
-    const profile = { about, username, email };
+    const profile = { password: req.body.password, email: req.body.email };
+
+    console.log('profile - ', profile);
 
     // Check if the user is in the db searching email
     User.findOne({
@@ -30,7 +31,7 @@ const SignupStrategy = new Strategy(
 
         // USER EXISTS
         if (user) {
-          return done("Account already exists.  Please sign-in.", null);
+          return done('Account already exists.  Please sign-in.', null);
         }
 
         // Create New User

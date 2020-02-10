@@ -1,13 +1,15 @@
-const passport = require("passport");
-const User = require("../models/user");
+const passport = require('passport');
+const User = require('../models/user');
 //import all strategies
-const SignupStrategy = require("./SignupStrategy");
-const SigninStrategy = require("./SigninStrategy");
+const SignupStrategy = require('./SignupStrategy');
+const SigninStrategy = require('./SigninStrategy');
 // const GoogleStrategy = require("./GoogleStrategy");
 // const GitHub = require("./GitHub");
 
 // could also serialize by user.id instead of user.email - just update the deserialize to .findById
 passport.serializeUser(function(user, done) {
+  console.log('SERIALIZEUSER - ', user);
+
   done(null, user.email);
 });
 
@@ -21,7 +23,7 @@ passport.deserializeUser(function(email, done) {
 });
 
 // First parameter can be any name you prefer
-passport.use("local-signin", SigninStrategy);
-passport.use("local-signup", SignupStrategy);
+passport.use('local-signin', SigninStrategy);
+passport.use('local-signup', SignupStrategy);
 
 module.exports = passport;

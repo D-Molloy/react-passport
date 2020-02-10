@@ -1,8 +1,8 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
 // anytime you need to authenticate, bring in passport
-const passport = require("../passport");
+const passport = require('../passport');
 
 // passport.authenticate("local-signup", {
 //   successRedirect: "/",
@@ -12,14 +12,15 @@ const passport = require("../passport");
 
 // -- /auth/signup
 // -- Using a custom cb for react - we don't want the redirect (above), just confirmation something happened
-router.post("/signup", (req, res, next) => {
-  passport.authenticate("local-signup", (error, user, info) => {
-    console.log({ error, user, info });
+router.post('/signup', (req, res, next) => {
+  console.log('req.body - ', req.body);
+  passport.authenticate('local-signup', (error, user, info) => {
+    console.log('INSIDE AUTHENTICATE - ', { error, user, info });
     if (error) {
-      console.log("IN ERROR");
+      console.log('IN ERROR');
       return res.status(500).json({
         success: false,
-        error: error.message || "Internal Server Error"
+        error: error.message || 'Internal Server Error'
       });
     }
     // setting up persistent sessions
@@ -27,7 +28,7 @@ router.post("/signup", (req, res, next) => {
       if (err) {
         return res.status(500).json({
           success: false,
-          error: err || "Internal Server Error"
+          error: err || 'Internal Server Error'
         });
       }
       user.isAuthenticated = true;
@@ -45,14 +46,14 @@ router.post("/signup", (req, res, next) => {
   })(req, res, next);
 });
 // /auth/signin
-router.post("/signin", function(req, res, next) {
-  passport.authenticate("local-signin", (error, user, info) => {
+router.post('/signin', function(req, res, next) {
+  passport.authenticate('local-signin', (error, user, info) => {
     console.log({ error, user, info });
     if (error) {
-      console.log("IN ERROR");
+      console.log('IN ERROR');
       return res.status(500).json({
         success: false,
-        error: error || "Internal Server Error"
+        error: error || 'Internal Server Error'
       });
     }
 
@@ -61,7 +62,7 @@ router.post("/signin", function(req, res, next) {
       if (err) {
         return res.status(500).json({
           success: false,
-          error: err || "Internal Server Error"
+          error: err || 'Internal Server Error'
         });
       }
       user.isAuthenticated = true;
@@ -79,13 +80,19 @@ router.post("/signin", function(req, res, next) {
 });
 
 // /auth/api
-router.get("/api", (req, res) => {
+router.get('/api', (req, res) => {
   // get the user info from passport
-  console.log(req.user); //or req.session.passport.user fo
-  res.json({ user: req.user });
+  console.log(req.user); //or req.session.passport.user
+
+  res.json({
+    user: {
+      _id: req.user._id,
+      email: req.user.email
+    }
+  });
 });
 
-router.get("/logout", function(req, res) {
+router.get('/logout', function(req, res) {
   req.logout();
   res.send(true);
 });
