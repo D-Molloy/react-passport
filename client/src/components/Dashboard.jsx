@@ -33,6 +33,12 @@ class Dashboard extends Component {
       .get("/auth/logout")
       .then(data => {
         window.localStorage.removeItem("isAuthenticated");
+
+        this.setState({
+          name: "",
+          email: "",
+          about: ""
+        });
         this.props.history.push("/login");
       })
       .catch(err => this.props.history.push("/login"));

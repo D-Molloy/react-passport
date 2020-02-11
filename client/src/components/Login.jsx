@@ -6,7 +6,8 @@ class Login extends Component {
     email: "",
     password: "",
     error: false,
-    message: ""
+    message: "",
+    chosenProfesh: ""
   };
 
   handleChange = e => {
